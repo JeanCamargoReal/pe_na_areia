@@ -8,28 +8,22 @@
 import Foundation
 
 // Singleton
-final class NetworkClient {
-	static let shared: NetworkClient = NetworkClient()
-
-	private(set) var urlRequest: URL?
-
-	private init() {}
-
-	func request(from url: URL) {
-		urlRequest = url
-	}
+protocol NetworkClient {
+	func request(from url: URL)
 }
 
 
 final class RemoteRestaurantLoader {
 
 	let url: URL
+	let networkClient: NetworkClient
 
-	init(url: URL) {
+	init(url: URL, networkClient: NetworkClient) {
 		self.url = url
+		self.networkClient = networkClient
 	}
 
 	func load() {
-		NetworkClient.shared.request(from: url)
+		networkClient.request(from: url)
 	}
 }
