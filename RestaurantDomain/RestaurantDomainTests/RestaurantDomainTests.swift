@@ -36,8 +36,6 @@ final class RestaurantDomainTests: XCTestCase {
 		let client = NetworkClientSpy()
 		let sut = RemoteRestaurantLoader(url: anyURL, networkClient: client)
 
-		client.stateHandler = .error(NSError(domain: "any error", code: -1))
-
 		let exp = expectation(description: "esperando retornoa da clousure")
 
 		var returnedResult: RemoteRestaurantLoader.Error?
@@ -46,6 +44,8 @@ final class RestaurantDomainTests: XCTestCase {
 			returnedResult = result
 			exp.fulfill()
 		}
+
+		client.completionWithError()
 
 		wait(for: [exp], timeout: 1.0)
 
@@ -58,14 +58,14 @@ final class RestaurantDomainTests: XCTestCase {
 		let sut = RemoteRestaurantLoader(url: anyURL, networkClient: client)
 		let exp = expectation(description: "esperando retornoa da clousure")
 
-		client.stateHandler = .success
-
 		var returnedResult: RemoteRestaurantLoader.Error?
 
 		sut.load { result in
 			returnedResult = result
 			exp.fulfill()
 		}
+
+		client.completionWithSuccess()
 
 		wait(for: [exp], timeout: 1.0)
 
@@ -75,11 +75,19 @@ final class RestaurantDomainTests: XCTestCase {
 
 final class NetworkClientSpy: NetworkClient {
 	private(set) var urlRequests: [URL] = []
-	var stateHandler: NetworkState?
+	private var completionHandler: ((NetworkState) -> Void)?
 
 	func request(from url: URL, completion: @escaping (NetworkState) -> Void) {
 		urlRequests.append(url)
-		completion(stateHandler ?? .error(anyError()))
+		completionHandler = completion
+	}
+
+	func completionWithError() {
+		completionHandler?(.error(anyError()))
+	}
+
+	func completionWithSuccess() {
+		completionHandler?(.success)
 	}
 
 	private func anyError() -> Error {
