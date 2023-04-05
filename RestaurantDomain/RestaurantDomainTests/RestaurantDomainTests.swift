@@ -10,20 +10,16 @@ import XCTest
 
 final class RestaurantDomainTests: XCTestCase {
 
-	func test_initializer_remoteRestauranteLoader_and_validate_urlRequest() throws {
-		let anyURL =  try XCTUnwrap(URL(string: "https://www.globo.com"))
-		let client = NetworkClientSpy()
-		let sut = RemoteRestaurantLoader(url: anyURL, networkClient: client)
+	func test_initializer_remoteRestauranteLoader_and_validate_urlRequest() {
+		let (sut, client, anyURL) = makeSUT()
 
 		sut.load() { _ in }
 
 		XCTAssertEqual(client.urlRequests, [anyURL])
 	}
 
-	func test_load_twice() throws {
-		let anyURL =  try XCTUnwrap(URL(string: "https://www.globo.com"))
-		let client = NetworkClientSpy()
-		let sut = RemoteRestaurantLoader(url: anyURL, networkClient: client)
+	func test_load_twice() {
+		let (sut, client, anyURL) = makeSUT()
 
 		sut.load() { _ in }
 		sut.load() { _ in }
@@ -31,10 +27,8 @@ final class RestaurantDomainTests: XCTestCase {
 		XCTAssertEqual(client.urlRequests, [anyURL, anyURL])
 	}
 
-	func test_load_and_returned_error_for_connectivity() throws {
-		let anyURL =  try XCTUnwrap(URL(string: "https://www.globo.com"))
-		let client = NetworkClientSpy()
-		let sut = RemoteRestaurantLoader(url: anyURL, networkClient: client)
+	func test_load_and_returned_error_for_connectivity() {
+		let (sut, client, _) = makeSUT()
 
 		let exp = expectation(description: "esperando retornoa da clousure")
 
@@ -52,10 +46,9 @@ final class RestaurantDomainTests: XCTestCase {
 		XCTAssertEqual(returnedResult, .connectivity)
 	}
 
-	func test_load_and_returned_error_for_invalidData() throws {
-		let anyURL =  try XCTUnwrap(URL(string: "https://www.globo.com"))
-		let client = NetworkClientSpy()
-		let sut = RemoteRestaurantLoader(url: anyURL, networkClient: client)
+	func test_load_and_returned_error_for_invalidData() {
+		let (sut, client, _) = makeSUT()
+
 		let exp = expectation(description: "esperando retornoa da clousure")
 
 		var returnedResult: RemoteRestaurantLoader.Error?
@@ -70,6 +63,14 @@ final class RestaurantDomainTests: XCTestCase {
 		wait(for: [exp], timeout: 1.0)
 
 		XCTAssertEqual(returnedResult, .invalidData)
+	}
+
+	private func makeSUT() -> (sut: RemoteRestaurantLoader, client: NetworkClientSpy, anyURL: URL) {
+		let anyURL = URL(string: "https://www.globo.com")!
+		let client = NetworkClientSpy()
+		let sut = RemoteRestaurantLoader(url: anyURL, networkClient: client)
+
+		return (sut, client, anyURL)
 	}
 }
 
