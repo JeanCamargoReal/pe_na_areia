@@ -84,6 +84,31 @@ final class RestaurantDomainTests: XCTestCase {
 		XCTAssertEqual(returnedResult, .success([]))
 	}
 
+	func test_load_and_returned_success_with_restaurant_item_list() throws {
+		let (sut, client, _) = makeSUT()
+
+		let exp = expectation(description: "esperando retornoa da clousure")
+
+		var returnedResult: RemoteRestaurantLoader.RemoteRestaurantResult?
+
+		sut.load { result in
+			returnedResult = result
+			exp.fulfill()
+		}
+
+		let (model1, json1) = makeItem()
+		let (model2, json2) = makeItem()
+
+		let jsonItem = ["items": [json1, json2]]
+		let data = try XCTUnwrap(JSONSerialization.data(withJSONObject: jsonItem))
+
+		client.completionWithSuccess(data: data)
+
+		wait(for: [exp], timeout: 1.0)
+
+		XCTAssertEqual(returnedResult, .success([model1, model2]))
+	}
+
 
 	private func makeSUT() -> (sut: RemoteRestaurantLoader, client: NetworkClientSpy, anyURL: URL) {
 		let anyURL = URL(string: "https://www.globo.com")!
@@ -95,6 +120,30 @@ final class RestaurantDomainTests: XCTestCase {
 
 	private func emptyData() -> Data {
 		return Data("{\"items\": []}".utf8)
+	}
+
+	private func makeItem(id: UUID = UUID(), name: String = "name", location: String = "location",
+						  distance: Float = 5.5, ratings: Int = 4, parasols: Int = 10) -> (model: RestaurantItem,
+																						   json: [String: Any]) {
+		let model = RestaurantItem(
+			id: id,
+			name: name,
+			location: location,
+			distance: distance,
+			ratings: ratings,
+			parasols: parasols
+		)
+
+		let itemJson: [String: Any] = [
+			"id": model.id.uuidString,
+			"name": model.name,
+			"location": model.location,
+			"distance": model.distance,
+			"ratings": model.ratings,
+			"parasols": model.parasols
+		]
+
+		return (model, itemJson)
 	}
 }
 
