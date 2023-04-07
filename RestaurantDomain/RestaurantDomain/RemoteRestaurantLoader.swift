@@ -7,7 +7,11 @@
 
 import Foundation
 
-struct RestaurantItem {
+struct RestaurantRoot: Decodable {
+	let items: [RestaurantItem]
+}
+
+struct RestaurantItem: Decodable, Equatable {
 	let id: UUID
 	let name: String
 	let location: String
@@ -37,11 +41,20 @@ final class RemoteRestaurantLoader {
 		self.networkClient = networkClient
 	}
 
-	func load(completion: @escaping (RemoteRestaurantLoader.Error) -> Void) {
+	typealias RemoteRestaurantResult = Result<[RestaurantItem], RemoteRestaurantLoader.Error>
+
+	func load(completion: @escaping (RemoteRestaurantLoader.RemoteRestaurantResult) -> Void) {
 		networkClient.request(from: url) { result in
 			switch result {
-				case .success: completion(.invalidData)
-				case .failure: completion(.connectivity)
+				case let .success((data, _)):
+
+					guard let json = try? JSONDecoder().decode(RestaurantRoot.self, from: data) else {
+						return completion(.failure(.invalidData))
+					}
+
+					completion(.success(json.items))
+
+				case .failure: completion(.failure(.connectivity))
 			}
 		}
 	}
