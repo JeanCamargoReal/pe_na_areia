@@ -84,11 +84,13 @@ final class NetworkClientSpy: NetworkClient {
 	}
 
 	func completionWithError() {
-		completionHandler?(.error(anyError()))
+		completionHandler?(.failure(anyError()))
 	}
 
-	func completionWithSuccess() {
-		completionHandler?(.success)
+	func completionWithSuccess(statusCode: Int = 200, data: Data = Data()) {
+		let response = HTTPURLResponse(url: urlRequests[0], statusCode: statusCode, httpVersion: nil, headerFields: nil)!
+
+		completionHandler?(.success((data, response)))
 	}
 
 	private func anyError() -> Error {

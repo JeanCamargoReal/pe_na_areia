@@ -7,12 +7,18 @@
 
 import Foundation
 
-enum NetworkState {
-	case success
-	case error(Error)
+struct RestaurantItem {
+	let id: UUID
+	let name: String
+	let location: String
+	let distance: Float
+	let ratings: Int
+	let parasols: Int
 }
 
 protocol NetworkClient {
+	typealias NetworkState = Result<(Data, HTTPURLResponse), Error>
+
 	func request(from url: URL, completion: @escaping (NetworkState) -> Void)
 }
 
@@ -32,10 +38,10 @@ final class RemoteRestaurantLoader {
 	}
 
 	func load(completion: @escaping (RemoteRestaurantLoader.Error) -> Void) {
-		networkClient.request(from: url) { state in
-			switch state {
+		networkClient.request(from: url) { result in
+			switch result {
 				case .success: completion(.invalidData)
-				case .error: completion(.connectivity)
+				case .failure: completion(.connectivity)
 			}
 		}
 	}
