@@ -30,108 +30,52 @@ final class RestaurantDomainTests: XCTestCase {
 	func test_load_and_returned_error_for_connectivity() {
 		let (sut, client, _) = makeSUT()
 
-		let exp = expectation(description: "esperando retornoa da clousure")
-
-		var returnedResult: RemoteRestaurantLoader.RemoteRestaurantResult?
-
-		sut.load { result in
-			returnedResult = result
-			exp.fulfill()
+		assert(sut, completion: .failure(.connectivity)) {
+			client.completionWithError()
 		}
-
-		client.completionWithError()
-
-		wait(for: [exp], timeout: 1.0)
-
-		XCTAssertEqual(returnedResult, .failure(.connectivity))
 	}
 
 	func test_load_and_returned_error_for_invalidData() {
 		let (sut, client, _) = makeSUT()
 
-		let exp = expectation(description: "esperando retornoa da clousure")
-
-		var returnedResult: RemoteRestaurantLoader.RemoteRestaurantResult?
-
-		sut.load { result in
-			returnedResult = result
-			exp.fulfill()
+		assert(sut, completion: .failure(.invalidData)) {
+			client.completionWithSuccess()
 		}
-
-		client.completionWithSuccess()
-
-		wait(for: [exp], timeout: 1.0)
-
-		XCTAssertEqual(returnedResult, .failure(.invalidData))
 	}
 
 	func test_load_and_returned_success_with_empty_list() {
 		let (sut, client, _) = makeSUT()
 
-		let exp = expectation(description: "esperando retornoa da clousure")
-
-		var returnedResult: RemoteRestaurantLoader.RemoteRestaurantResult?
-
-		sut.load { result in
-			returnedResult = result
-			exp.fulfill()
+		assert(sut, completion: .success([])) {
+			client.completionWithSuccess(data: emptyData())
 		}
-
-		client.completionWithSuccess(data: emptyData())
-
-		wait(for: [exp], timeout: 1.0)
-
-		XCTAssertEqual(returnedResult, .success([]))
 	}
 
 	func test_load_and_returned_success_with_restaurant_item_list() throws {
 		let (sut, client, _) = makeSUT()
+		let item1 = makeItem()
+		let item2 = makeItem()
 
-		let exp = expectation(description: "esperando retornoa da clousure")
+		assert(sut, completion: .success([item1.model, item2.model])) {
+			let jsonItems = ["items": [item1.json, item2.json]]
+			let data = try! JSONSerialization.data(withJSONObject: jsonItems)
 
-		var returnedResult: RemoteRestaurantLoader.RemoteRestaurantResult?
-
-		sut.load { result in
-			returnedResult = result
-			exp.fulfill()
+			client.completionWithSuccess(data: data)
 		}
-
-		let (model1, json1) = makeItem()
-		let (model2, json2) = makeItem()
-
-		let jsonItem = ["items": [json1, json2]]
-		let data = try XCTUnwrap(JSONSerialization.data(withJSONObject: jsonItem))
-
-		client.completionWithSuccess(data: data)
-
-		wait(for: [exp], timeout: 1.0)
-
-		XCTAssertEqual(returnedResult, .success([model1, model2]))
 	}
 
 	func test_load_and_returned_error_for_invalid_statusCode() throws {
 		let (sut, client, _) = makeSUT()
 
-		let exp = expectation(description: "esperando retornoa da clousure")
+		assert(sut, completion: .failure(.invalidData)) {
+			let item1 = makeItem()
+			let item2 = makeItem()
 
-		var returnedResult: RemoteRestaurantLoader.RemoteRestaurantResult?
+			let jsonItems = ["items": [item1.json, item2.json]]
+			let data = try! JSONSerialization.data(withJSONObject: jsonItems)
 
-		sut.load { result in
-			returnedResult = result
-			exp.fulfill()
+			client.completionWithSuccess(statusCode: 201, data: data)
 		}
-
-		let (_, json1) = makeItem()
-		let (_, json2) = makeItem()
-
-		let jsonItem = ["items": [json1, json2]]
-		let data = try XCTUnwrap(JSONSerialization.data(withJSONObject: jsonItem))
-
-		client.completionWithSuccess(statusCode: 201, data: data)
-
-		wait(for: [exp], timeout: 1.0)
-
-		XCTAssertEqual(returnedResult, .failure(.invalidData))
 	}
 
 	func test_load_not_returned_after_sut_deallocated() {
@@ -163,7 +107,29 @@ final class RestaurantDomainTests: XCTestCase {
 		return (sut, client, anyURL)
 	}
 
-	func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
+	private func assert(_ sut: RemoteRestaurantLoader,
+						completion result:  RemoteRestaurantLoader.RemoteRestaurantResult,
+						when action: () -> Void,
+						file: StaticString = #file,
+						line: UInt = #line) {
+
+		let exp = expectation(description: "esperando retorno da clousure")
+
+		var returnedResult: RemoteRestaurantLoader.RemoteRestaurantResult?
+
+		sut.load { result in
+			returnedResult = result
+			exp.fulfill()
+		}
+
+		action()
+
+		wait(for: [exp], timeout: 1.0)
+
+		XCTAssertEqual(returnedResult, result)
+	}
+
+	private func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
 		addTeardownBlock { [weak instance] in
 			XCTAssertNil(instance, "A instância deveria ter sido desalocada, possível vazamento de memória.", file: file, line: line)
 		}
@@ -174,8 +140,7 @@ final class RestaurantDomainTests: XCTestCase {
 	}
 
 	private func makeItem(id: UUID = UUID(), name: String = "name", location: String = "location",
-						  distance: Float = 5.5, ratings: Int = 4, parasols: Int = 10) -> (model: RestaurantItem,
-																						   json: [String: Any]) {
+						  distance: Float = 5.5, ratings: Int = 4, parasols: Int = 10) -> (model: RestaurantItem, json: [String: Any]) {
 		let model = RestaurantItem(
 			id: id,
 			name: name,
