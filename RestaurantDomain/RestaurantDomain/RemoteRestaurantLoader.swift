@@ -42,22 +42,26 @@ final class RemoteRestaurantLoader {
 		self.networkClient = networkClient
 	}
 
+	private func successfullyValidation(_ data: Data, response: HTTPURLResponse) -> RemoteRestaurantResult {
+		guard let json = try? JSONDecoder().decode(RestaurantRoot.self, from: data), response.statusCode == okResponse else {
+
+			return .failure(.invalidData)
+		}
+
+		return .success(json.items)
+	}
+
 	typealias RemoteRestaurantResult = Result<[RestaurantItem], RemoteRestaurantLoader.Error>
 
 	func load(completion: @escaping (RemoteRestaurantLoader.RemoteRestaurantResult) -> Void) {
 		let okResponse = okResponse
 
 		networkClient.request(from: url) { [weak self] result in
-			guard let _ = self else { return } 
+			guard let self = self else { return }
 
 			switch result {
 				case let .success((data, response)):
-
-					guard let json = try? JSONDecoder().decode(RestaurantRoot.self, from: data), response.statusCode == okResponse else {
-						return completion(.failure(.invalidData))
-					}
-
-					completion(.success(json.items))
+					completion(self.successfullyValidation(data, response: response))
 
 				case .failure: completion(.failure(.connectivity))
 			}
