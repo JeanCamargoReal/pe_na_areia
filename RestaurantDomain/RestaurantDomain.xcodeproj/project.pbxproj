@@ -14,6 +14,7 @@
 		C5CB23AC29F0282000854368 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CB23AB29F0282000854368 /* NetworkClient.swift */; };
 		C5CB23AE29F0289600854368 /* RestaurantItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CB23AD29F0289600854368 /* RestaurantItem.swift */; };
 		C5CB23B029F0299300854368 /* NetworkClientSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CB23AF29F0299300854368 /* NetworkClientSpy.swift */; };
+		C5CB23B229F1A9E600854368 /* NetworkServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CB23B129F1A9E600854368 /* NetworkServiceTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		C5CB23AB29F0282000854368 /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		C5CB23AD29F0289600854368 /* RestaurantItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantItem.swift; sourceTree = "<group>"; };
 		C5CB23AF29F0299300854368 /* NetworkClientSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClientSpy.swift; sourceTree = "<group>"; };
+		C5CB23B129F1A9E600854368 /* NetworkServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +94,7 @@
 			children = (
 				C5628E7A29DA2B91000BED7E /* RemoteRestaurantLoaderTests.swift */,
 				C5CB23AF29F0299300854368 /* NetworkClientSpy.swift */,
+				C5CB23B129F1A9E600854368 /* NetworkServiceTest.swift */,
 			);
 			path = RestaurantDomainTests;
 			sourceTree = "<group>";
@@ -216,6 +219,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5CB23B229F1A9E600854368 /* NetworkServiceTest.swift in Sources */,
 				C5CB23B029F0299300854368 /* NetworkClientSpy.swift in Sources */,
 				C5628E7B29DA2B91000BED7E /* RemoteRestaurantLoaderTests.swift in Sources */,
 			);

@@ -12,3 +12,19 @@ public protocol NetworkClient {
 
 	func request(from url: URL, completion: @escaping (NetworkResult) -> Void)
 }
+
+final class NetworkService: NetworkClient {
+	let session: URLSession
+
+	init(session: URLSession) {
+		self.session = session
+	}
+
+
+	func request(from url: URL, completion: @escaping (NetworkResult) -> Void) {
+		session.dataTask(with: url) { _,_,_ in
+
+		}
+	}
+}
+
