@@ -89,8 +89,8 @@
 		C5628E6F29DA2B90000BED7E /* RestaurantDomain */ = {
 			isa = PBXGroup;
 			children = (
-				C5CB23B829F4220400854368 /* RemoteLoader */,
 				C5CB23B729F421F400854368 /* LocalLoader */,
+				C5CB23B829F4220400854368 /* RemoteLoader */,
 				C5628E7029DA2B90000BED7E /* RestaurantDomain.h */,
 				C5CB23AD29F0289600854368 /* RestaurantItem.swift */,
 			);
