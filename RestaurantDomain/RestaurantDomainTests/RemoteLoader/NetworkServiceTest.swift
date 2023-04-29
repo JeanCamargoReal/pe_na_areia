@@ -74,7 +74,6 @@ final class NetworkServiceTests: XCTestCase {
 											file: StaticString = #file,
 											line: UInt = #line) -> Error? {
 
-		let anyError = NSError(domain: "", code: -1)
 		let result = assert(data: data, response: response, error: error)
 
 		switch result {
