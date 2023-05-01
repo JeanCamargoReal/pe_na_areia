@@ -75,6 +75,18 @@ final class LocalRestaurantLoaderTests: XCTestCase {
 		}
 	}
 
+	func test_save_non_insert_after_sut_deallocated() {
+		let currentDate = Date()
+		let cache = CacheClientSpy()
+		var sut: LocalRestaurantLoader? = LocalRestaurantLoader(cache: cache, currentDate: { currentDate })
+		let items = [makeItem()]
+
+		sut?.save(items) { _ in }
+		sut = nil
+
+		cache.completionHandlerForDelete(nil)
+	}
+
 	private func makeSUT(currentDate: Date = Date(), file: StaticString = #filePath, line: UInt = #line) -> (sut: LocalRestaurantLoader, cache: CacheClientSpy) {
 
 		let cache = CacheClientSpy()
