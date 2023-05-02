@@ -41,7 +41,11 @@ final class LocalRestaurantLoader {
 		cache.delete { [weak self] error in
 			guard let self else { return }
 			if error == nil {
-				self.cache.save(items, timestamp: self.currentDate(), completion: completion)
+				self.cache.save(items, timestamp: self.currentDate()) { [weak self] error in
+					guard self != nil else { return }
+
+					completion(error)
+				}
 			} else {
 				completion(error)
 			}
