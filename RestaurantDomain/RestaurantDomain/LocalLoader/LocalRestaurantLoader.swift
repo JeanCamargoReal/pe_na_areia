@@ -26,9 +26,11 @@ import Foundation
 public protocol CacheClient {
 	typealias SaveResult = (Error?) -> Void
 	typealias DeleteResult = (Error?) -> Void
+	typealias LoadResult = (Error?) -> Void
 
 	func save(_ items: [RestaurantItem], timestamp: Date, completion: @escaping SaveResult)
 	func delete(completion: @escaping DeleteResult)
+	func load(completion: @escaping LoadResult)
 }
 
 public final class LocalRestaurantLoader {
@@ -55,6 +57,19 @@ public final class LocalRestaurantLoader {
 			guard self != nil else { return }
 
 			completion(error)
+		}
+	}
+}
+
+extension LocalRestaurantLoader: RestaurantLoader {
+
+	public func load(completion: @escaping (Result<[RestaurantItem], RestaurantResultError>) -> Void) {
+		cache.load { error in
+			if error == nil {
+				completion(.success([]))
+			} else {
+				completion(.failure(.invalidData))
+			}
 		}
 	}
 }
