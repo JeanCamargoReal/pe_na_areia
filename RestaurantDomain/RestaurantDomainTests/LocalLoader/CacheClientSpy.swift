@@ -18,7 +18,7 @@ final class CacheClientSpy: CacheClient {
 
 	private(set) var methodsCalled = [Methods]()
 
-	private var completionHandlerInsert: ((Error?) -> Void)?
+	private var completionHandlerInsert: (CacheClient.SaveResult)?
 
 	func save(_ items: [RestaurantDomain.RestaurantItem], timestamp: Date, completion: @escaping CacheClient.SaveResult) {
 		methodsCalled.append(.save(items: items, timestamp: timestamp))
@@ -26,14 +26,14 @@ final class CacheClientSpy: CacheClient {
 		completionHandlerInsert = completion
 	}
 
-	private var completionHandlerDelete: ((Error?) -> Void)?
+	private var completionHandlerDelete: (CacheClient.DeleteResult)?
 
 	func delete(completion: @escaping CacheClient.DeleteResult) {
 		methodsCalled.append(.delete)
 		completionHandlerDelete = completion
 	}
 
-	private var completionHandlerLoad: ((Error?) -> Void)?
+	private var completionHandlerLoad: (LoadResult)?
 
 	func load(completion: @escaping LoadResult) {
 		methodsCalled.append(.load)
@@ -49,7 +49,7 @@ final class CacheClientSpy: CacheClient {
 		completionHandlerInsert?(error)
 	}
 
-	func completionHandlerForLoad(_ error: Error?) {
-		completionHandlerLoad?(error)
+	func completionHandlerForLoad(_ state: LoadResultState) {
+		completionHandlerLoad?(state)
 	}
 }
