@@ -27,6 +27,23 @@ final class LocalRestaurantLoaderForLoadCommandTests: XCTestCase {
 		XCTAssertEqual(returnedResult, .failure(.invalidData))
 	}
 
+	func test_load_returned_completion_success_with_empty_data() {
+		let (sut, cache) = makeSUT()
+
+		var returnedResult: (Result<[RestaurantItem], RestaurantResultError>)?
+
+		sut.load { result in
+			returnedResult = result
+		}
+
+		let anyError = NSError(domain: "any error", code: -1)
+
+		cache.completionHandlerForLoad(nil)
+
+		XCTAssertEqual(cache.methodsCalled, [.load])
+		XCTAssertEqual(returnedResult, .success([]))
+	}
+
 	private func makeSUT(currentDate: Date = Date(),
 						 file: StaticString = #filePath,
 						 line: UInt = #line) -> (sut: LocalRestaurantLoader,
