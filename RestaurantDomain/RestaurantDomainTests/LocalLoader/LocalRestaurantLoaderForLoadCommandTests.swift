@@ -18,8 +18,6 @@ final class LocalRestaurantLoaderForLoadCommandTests: XCTestCase {
 
 			cache.completionHandlerForLoad(.failure(anyError))
 		}
-
-		XCTAssertEqual(cache.methodsCalled, [.load])
 	}
 
 	func test_load_returned_completion_success_with_empty_data() {
@@ -50,6 +48,50 @@ final class LocalRestaurantLoaderForLoadCommandTests: XCTestCase {
 		assert(sut, completion: .success([])) {
 			cache.completionHandlerForLoad(.success(items: items, timestamp: oneDayOldCacheDate))
 		}
+	}
+
+	func test_load_delete_cache_after_error_to_load() {
+		let (sut, cache) = makeSUT()
+		let anyError = NSError(domain: "any error", code: -1)
+
+		sut.load { _ in }
+		cache.completionHandlerForLoad(.failure(anyError))
+
+		XCTAssertEqual(cache.methodsCalled, [.load, .delete])
+	}
+
+	func test_load_nonDelete_cache_aftet_empty_result() {
+		let (sut, cache) = makeSUT()
+
+		sut.load { _ in }
+		cache.completionHandlerForLoad(.empty)
+
+		XCTAssertEqual(cache.methodsCalled, [.load])
+	}
+
+	func test_load_onDelete_cache_when_one_day_less_than_old_cache() {
+		let currentDate = Date()
+		let oneDayLessThanOldCacheDate = currentDate.addind(days: -1).addind(seconds: 1)
+		let (sut, cache) = makeSUT(currentDate: currentDate)
+		let items = [makeItem()]
+
+		sut.load{ _ in }
+
+		cache.completionHandlerForLoad(.success(items: items, timestamp: oneDayLessThanOldCacheDate))
+
+		XCTAssertEqual(cache.methodsCalled, [.load])
+	}
+
+	func test_load_onDelete_cache_when_one_day_old_cache() {
+		let currentDate = Date()
+		let oneDayOldCacheDate = currentDate.addind(days: -1)
+		let (sut, cache) = makeSUT(currentDate: currentDate)
+		let items = [makeItem()]
+
+		sut.load { _ in }
+		cache.completionHandlerForLoad(.success(items: items, timestamp: oneDayOldCacheDate))
+
+		XCTAssertEqual(cache.methodsCalled, [.load, .delete])
 	}
 
 	private func makeSUT(currentDate: Date = Date(),

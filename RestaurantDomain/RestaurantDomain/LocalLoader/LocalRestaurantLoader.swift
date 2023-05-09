@@ -85,9 +85,16 @@ extension LocalRestaurantLoader: RestaurantLoader {
 			guard let self else { return }
 
 			switch state {
-				case let .success(items, timestamp) where self.validade(timestamp): completion(.success(items))
-				case .success, .empty: completion(.success([]))
-				case .failure: completion(.failure(.invalidData))
+				case let .success(items, timestamp) where self.validade(timestamp):
+					completion(.success(items))
+				case .success:
+					self.cache.delete { _ in }
+					completion(.success([]))
+				case .empty:
+					completion(.success([]))
+				case .failure:
+					self.cache.delete { _ in }
+					completion(.failure(.invalidData))
 			}
 		}
 	}
