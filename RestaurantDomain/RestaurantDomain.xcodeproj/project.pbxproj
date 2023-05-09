@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		C52015C32A0A791C00AB7D95 /* LocalRestaurantLoaderForValidateCacheCommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52015C22A0A791C00AB7D95 /* LocalRestaurantLoaderForValidateCacheCommandTests.swift */; };
+		C52015C52A0A98A700AB7D95 /* CachePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52015C42A0A98A700AB7D95 /* CachePolicy.swift */; };
+		C52015C72A0A98EA00AB7D95 /* CacheClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52015C62A0A98EA00AB7D95 /* CacheClient.swift */; };
 		C5628E7629DA2B91000BED7E /* RestaurantDomain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5628E6D29DA2B90000BED7E /* RestaurantDomain.framework */; };
 		C5628E7B29DA2B91000BED7E /* RemoteRestaurantLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5628E7A29DA2B91000BED7E /* RemoteRestaurantLoaderTests.swift */; };
 		C5628E7C29DA2B91000BED7E /* RestaurantDomain.h in Headers */ = {isa = PBXBuildFile; fileRef = C5628E7029DA2B90000BED7E /* RestaurantDomain.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -37,6 +39,8 @@
 
 /* Begin PBXFileReference section */
 		C52015C22A0A791C00AB7D95 /* LocalRestaurantLoaderForValidateCacheCommandTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalRestaurantLoaderForValidateCacheCommandTests.swift; sourceTree = "<group>"; };
+		C52015C42A0A98A700AB7D95 /* CachePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachePolicy.swift; sourceTree = "<group>"; };
+		C52015C62A0A98EA00AB7D95 /* CacheClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheClient.swift; sourceTree = "<group>"; };
 		C5628E6D29DA2B90000BED7E /* RestaurantDomain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RestaurantDomain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5628E7029DA2B90000BED7E /* RestaurantDomain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RestaurantDomain.h; sourceTree = "<group>"; };
 		C5628E7529DA2B91000BED7E /* RestaurantDomainTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RestaurantDomainTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,6 +124,8 @@
 			isa = PBXGroup;
 			children = (
 				C5CB23BA29F4224200854368 /* LocalRestaurantLoader.swift */,
+				C52015C42A0A98A700AB7D95 /* CachePolicy.swift */,
+				C52015C62A0A98EA00AB7D95 /* CacheClient.swift */,
 			);
 			path = LocalLoader;
 			sourceTree = "<group>";
@@ -267,7 +273,9 @@
 			files = (
 				C595302E2A056E6300BD81D7 /* RestaurantLoader.swift in Sources */,
 				C5628E8629DA3028000BED7E /* RemoteRestaurantLoader.swift in Sources */,
+				C52015C52A0A98A700AB7D95 /* CachePolicy.swift in Sources */,
 				C5CB23BB29F4224200854368 /* LocalRestaurantLoader.swift in Sources */,
+				C52015C72A0A98EA00AB7D95 /* CacheClient.swift in Sources */,
 				C5CB23AE29F0289600854368 /* RestaurantItem.swift in Sources */,
 				C5CB23AC29F0282000854368 /* NetworkClient.swift in Sources */,
 			);

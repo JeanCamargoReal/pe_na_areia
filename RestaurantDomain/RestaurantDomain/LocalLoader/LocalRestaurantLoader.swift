@@ -23,40 +23,6 @@
 
 import Foundation
 
-public protocol CachePolicy {
-	func validate(_ timestamp: Date, with currentData: Date) -> Bool
-}
-
-public final class RestaurantLoaderCachePolicy: CachePolicy {
-
-	public init() {}
-
-	private let maxAge: Int = 1
-
-	public func validate(_ timestamp: Date, with currentData: Date) -> Bool {
-		let calendar = Calendar(identifier: .gregorian)
-		guard let maxAge = calendar.date(byAdding: .day, value: maxAge, to: timestamp) else {
-			return false
-		}
-
-		return currentData < maxAge
-	}
-}
-
-public enum LoadResultState {
-	case empty
-	case success(items: [RestaurantItem], timestamp: Date)
-	case failure(Error)
-}
-public protocol CacheClient {
-	typealias SaveResult = (Error?) -> Void
-	typealias DeleteResult = (Error?) -> Void
-	typealias LoadResult = (LoadResultState) -> Void
-
-	func save(_ items: [RestaurantItem], timestamp: Date, completion: @escaping SaveResult)
-	func delete(completion: @escaping DeleteResult)
-	func load(completion: @escaping LoadResult)
-}
 public final class LocalRestaurantLoader {
 
 	private let cache: CacheClient
