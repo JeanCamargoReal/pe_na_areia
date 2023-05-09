@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C52015C32A0A791C00AB7D95 /* LocalRestaurantLoaderForValidateCacheCommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52015C22A0A791C00AB7D95 /* LocalRestaurantLoaderForValidateCacheCommandTests.swift */; };
 		C5628E7629DA2B91000BED7E /* RestaurantDomain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5628E6D29DA2B90000BED7E /* RestaurantDomain.framework */; };
 		C5628E7B29DA2B91000BED7E /* RemoteRestaurantLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5628E7A29DA2B91000BED7E /* RemoteRestaurantLoaderTests.swift */; };
 		C5628E7C29DA2B91000BED7E /* RestaurantDomain.h in Headers */ = {isa = PBXBuildFile; fileRef = C5628E7029DA2B90000BED7E /* RestaurantDomain.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C52015C22A0A791C00AB7D95 /* LocalRestaurantLoaderForValidateCacheCommandTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalRestaurantLoaderForValidateCacheCommandTests.swift; sourceTree = "<group>"; };
 		C5628E6D29DA2B90000BED7E /* RestaurantDomain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RestaurantDomain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5628E7029DA2B90000BED7E /* RestaurantDomain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RestaurantDomain.h; sourceTree = "<group>"; };
 		C5628E7529DA2B91000BED7E /* RestaurantDomainTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RestaurantDomainTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -148,6 +150,7 @@
 				C5CB23BD29F4228700854368 /* LocalRestaurantLoaderForSaveCommandTests.swift */,
 				C595302F2A05747C00BD81D7 /* LocalRestaurantLoaderForLoadCommandTests.swift */,
 				C59530312A08121B00BD81D7 /* CacheClientSpy.swift */,
+				C52015C22A0A791C00AB7D95 /* LocalRestaurantLoaderForValidateCacheCommandTests.swift */,
 			);
 			path = LocalLoader;
 			sourceTree = "<group>";
@@ -277,6 +280,7 @@
 				C5CB23B629F31DA000854368 /* XCTestCase+Helpers.swift in Sources */,
 				C5CB23B229F1A9E600854368 /* NetworkServiceTest.swift in Sources */,
 				C59530302A05747C00BD81D7 /* LocalRestaurantLoaderForLoadCommandTests.swift in Sources */,
+				C52015C32A0A791C00AB7D95 /* LocalRestaurantLoaderForValidateCacheCommandTests.swift in Sources */,
 				C5CB23BE29F4228700854368 /* LocalRestaurantLoaderForSaveCommandTests.swift in Sources */,
 				C5CB23B429F31D3500854368 /* URLSessionSpy.swift in Sources */,
 				C5CB23B029F0299300854368 /* NetworkClientSpy.swift in Sources */,

@@ -53,8 +53,8 @@ final class RemoteRestaurantLoaderTests: XCTestCase {
 
 	func test_load_and_returned_success_with_restaurant_item_list() throws {
 		let (sut, client, _) = makeSUT()
-		let item1 = makeItem()
-		let item2 = makeItem()
+		let item1 = makeRestaurantItem()
+		let item2 = makeRestaurantItem()
 
 		assert(sut, completion: .success([item1.model, item2.model])) {
 			let jsonItems = ["items": [item1.json, item2.json]]
@@ -68,8 +68,8 @@ final class RemoteRestaurantLoaderTests: XCTestCase {
 		let (sut, client, _) = makeSUT()
 
 		assert(sut, completion: .failure(.invalidData)) {
-			let item1 = makeItem()
-			let item2 = makeItem()
+			let item1 = makeRestaurantItem()
+			let item2 = makeRestaurantItem()
 
 			let jsonItems = ["items": [item1.json, item2.json]]
 			let data = try! JSONSerialization.data(withJSONObject: jsonItems)
@@ -133,7 +133,7 @@ final class RemoteRestaurantLoaderTests: XCTestCase {
 		return Data("{\"items\": []}".utf8)
 	}
 
-	private func makeItem(id: UUID = UUID(), name: String = "name", location: String = "location",
+	private func makeRestaurantItem(id: UUID = UUID(), name: String = "name", location: String = "location",
 						  distance: Float = 5.5, ratings: Int = 4, parasols: Int = 10) -> (model: RestaurantItem, json: [String: Any]) {
 		let model = RestaurantItem(
 			id: id,

@@ -123,10 +123,6 @@ final class LocalRestaurantLoaderForSaveCommandTests: XCTestCase {
 		return(sut, cache)
 	}
 
-	private func makeItem() -> RestaurantItem {
-		return RestaurantItem(id: UUID(), name: "name", location: "location", distance: 5.5, ratings: 0, parasols: 0)
-	}
-
 	private func assert(_ sut: LocalRestaurantLoader,
 						completion error: NSError?,
 						when action: () -> Void,
