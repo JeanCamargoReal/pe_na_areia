@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import RestaurantDomain
-
 final class LocalRestaurantLoaderForLoadCommandTests: XCTestCase {
 
 	func test_load_returned_completion_error() {
@@ -15,12 +14,11 @@ final class LocalRestaurantLoaderForLoadCommandTests: XCTestCase {
 
 		assert(sut, completion: .failure(.invalidData)) {
 			let anyError = NSError(domain: "any error", code: -1)
-
 			cache.completionHandlerForLoad(.failure(anyError))
 		}
 	}
 
-	func test_load_returned_completion_success_with_empty_data() {
+	func test_load_returned_completion_success_with_empy_data() {
 		let (sut, cache) = makeSUT()
 
 		assert(sut, completion: .success([])) {
@@ -52,26 +50,23 @@ final class LocalRestaurantLoaderForLoadCommandTests: XCTestCase {
 
 	private func makeSUT(currentDate: Date = Date(),
 						 file: StaticString = #filePath,
-						 line: UInt = #line) -> (sut: LocalRestaurantLoader,
-												 cache: CacheClientSpy) {
-
+						 line: UInt = #line) -> (sut: LocalRestaurantLoader, cache: CacheClientSpy) {
 		let cache = CacheClientSpy()
-		let sut = LocalRestaurantLoader(cache: cache, currentDate: { currentDate })
-
+		let sut = LocalRestaurantLoader(cache: cache, currentDate: { currentDate } )
 		trackForMemoryLeaks(cache)
 		trackForMemoryLeaks(sut)
-
-		return(sut, cache)
+		return (sut, cache)
 	}
 
-	private func assert(_ sut: LocalRestaurantLoader,
-						completion result: (Result<[RestaurantItem], RestaurantResultError>)?,
-						when action: () -> Void,
-						file: StaticString = #filePath,
-						line: UInt = #line) {
+	private func assert(
+		_ sut: LocalRestaurantLoader,
+		completion result: (Result<[RestaurantItem], RestaurantResultError>)??,
+		when action: () -> Void,
+		file: StaticString = #filePath,
+		line: UInt = #line
+	) {
 
 		var returnedResult: (Result<[RestaurantItem], RestaurantResultError>)?
-
 		sut.load { result in
 			returnedResult = result
 		}
