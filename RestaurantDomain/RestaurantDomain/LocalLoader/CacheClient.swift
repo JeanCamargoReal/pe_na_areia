@@ -12,6 +12,7 @@ public enum LoadResultState {
 	case success(items: [RestaurantItem], timestamp: Date)
 	case failure(Error)
 }
+
 public protocol CacheClient {
 	typealias SaveResult = (Error?) -> Void
 	typealias DeleteResult = (Error?) -> Void
@@ -21,3 +22,59 @@ public protocol CacheClient {
 	func delete(completion: @escaping DeleteResult)
 	func load(completion: @escaping LoadResult)
 }
+
+final class CacheService: CacheClient {
+	private struct Cache: Codable {
+		let items: [RestaurantItem]
+		let timestamp: Date
+	}
+
+	private let managerURL: URL
+
+	init(managerURL: URL) {
+		self.managerURL = managerURL
+	}
+
+	func save(_ items: [RestaurantItem], timestamp: Date, completion: @escaping SaveResult) {
+
+		do {
+			let cache = Cache(items: items, timestamp: timestamp)
+			let enconder = JSONEncoder()
+			let encoded = try enconder.encode(cache)
+			try encoded.write(to: managerURL)
+
+			completion(nil)
+		} catch {
+			completion(error)
+		}
+	}
+
+	func delete(completion: @escaping DeleteResult) {
+		guard FileManager.default.fileExists(atPath: managerURL.path) else {
+			return completion(nil)
+		}
+
+		do {
+			try FileManager.default.removeItem(at: managerURL)
+			completion(nil)
+		} catch {
+			completion(error)
+		}
+	}
+
+	func load(completion: @escaping LoadResult) {
+		guard let data = try? Data(contentsOf: managerURL) else {
+			return completion(.empty)
+		}
+
+		do {
+			let decoder = JSONDecoder()
+			let cache = try decoder.decode(Cache.self, from: data)
+
+			completion(.success(items: cache.items, timestamp: cache.timestamp))
+		} catch {
+			completion(.failure(error))
+		}
+	}
+}
+

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct RestaurantItem: Decodable, Equatable {
+public struct RestaurantItem: Codable, Equatable {
 	public let id: UUID
 	public let name: String
 	public let location: String
