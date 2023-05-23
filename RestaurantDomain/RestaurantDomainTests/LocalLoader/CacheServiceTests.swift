@@ -67,7 +67,6 @@ final class CacheServiceTests: XCTestCase {
 			switch (result, returnedResult) {
 				case (.empty, .empty), (.failure, .failure): break
 				case let (.success(items, timestamp), .success(returnedItems, returnedTimestamp)):
-//					.success(returnedItems, returnedTimestamp)):
 					XCTAssertEqual(returnedItems, items, file: file, line: line)
 					XCTAssertEqual(returnedTimestamp, timestamp, file: file, line: line)
 				default:
