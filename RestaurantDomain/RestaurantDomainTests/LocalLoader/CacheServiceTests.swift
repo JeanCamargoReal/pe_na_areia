@@ -9,11 +9,11 @@
 #### Inserir
 OK - O Cache vazio;
 OK - O Cache não vazio substitui o valor anterior;
-OK Erro (se possível simular, ex: permissão);
+OK - Erro (se possível simular, ex: permissão);
 #### Recuperar
-- O cache vazio;
-- O cache não vazio retorna dados;
-- Erro (se possível para simular, ex: dados inválidos)
+OK - O cache vazio;
+OK - O cache não vazio retorna dados;
+OK - Erro (se possível para simular, ex: dados inválidos)
 #### Apagar
 OK - O cache vazio não faz nada (o cache permanece vazio e não falha);
 OK - Os dados inseridos são apagadas;
@@ -99,6 +99,38 @@ final class CacheServiceTests: XCTestCase {
 		let returnedError = deleteCache(sut)
 
 		XCTAssertNotNil(returnedError)
+	}
+
+	func test_load_returned_empty_cache() {
+		let sut = makeSUT()
+
+		assert(sut, completion: .empty)
+	}
+
+	func test_load_returned_same_empty_cache_for_called_twice() {
+		let sut = makeSUT()
+		let sameResult: LoadResultState = .empty
+
+		assert(sut, completion: sameResult)
+		assert(sut, completion: sameResult)
+	}
+
+	func test_load_return_data_after_insert_data() {
+		let sut = makeSUT()
+		let items = [makeItem(), makeItem()]
+		let timestamp =  Date()
+
+		insert(sut, items: items, timestamp: timestamp)
+
+		assert(sut, completion: .success(items: items, timestamp: timestamp))
+	}
+
+	func test_load_returned_error_when_non_decode_data_cache() {
+		let managerURL = validManagerURL()
+		let sut = makeSUT(managerURL: managerURL)
+		let anyError = NSError(domain: "anyError", code: -1)
+
+		try? "invalidData".write(to: managerURL, atomically: false, encoding: .utf8)
 	}
 
 	private func makeSUT(managerURL: URL? = nil) -> CacheService {
