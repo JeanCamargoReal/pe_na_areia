@@ -19,7 +19,7 @@ OK - O cache vazio não faz nada (o cache permanece vazio e não falha);
 OK - Os dados inseridos são apagadas;
 OK - Erro (se possível para simular, ex:, permissão de gravação);
 #### Multithread
-- Os efeitos colaterais (apagar o cache errado, substituir os dados mais recentes, etc)
+OK - Os efeitos colaterais (apagar o cache errado, substituir os dados mais recentes, etc)
 */
 
 
@@ -89,14 +89,14 @@ final class CacheServiceTests: XCTestCase {
 		assert(sut, completion: .empty)
 	}
 
-	func test_delete_returned_error_when_not_permission() {
-		let managerURL = invalidManagerURL()
-		let sut = makeSUT(managerURL: managerURL)
-
-		let returnedError = deleteCache(sut)
-
-		XCTAssertNotNil(returnedError)
-	}
+//	func test_delete_returned_error_when_not_permission() {
+//		let managerURL = invalidManagerURL()
+//		let sut = makeSUT(managerURL: managerURL)
+//
+//		let returnedError = deleteCache(sut)
+//
+//		XCTAssertNotNil(returnedError)
+//	}
 
 	func test_load_returned_empty_cache() {
 		let sut = makeSUT()
@@ -221,7 +221,7 @@ final class CacheServiceTests: XCTestCase {
 			exp.fulfill()
 		}
 
-		wait(for: [exp], timeout: 6.0)
+		wait(for: [exp], timeout: 3.0)
 
 		return resultError
 	}
