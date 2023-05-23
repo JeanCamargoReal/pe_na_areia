@@ -15,8 +15,8 @@ OK Erro (se possível simular, ex: permissão);
 - O cache não vazio retorna dados;
 - Erro (se possível para simular, ex: dados inválidos)
 #### Apagar
-- O cache vazio não faz nada (o cache permanece vazio e não falha);
-- Os dados inseridos são apagadas;
+OK - O cache vazio não faz nada (o cache permanece vazio e não falha);
+OK - Os dados inseridos são apagadas;
 - Erro (se possível para simular, ex:, permissão de gravação);
 #### Multithread
 - Os efeitos colaterais (apagar o cache errado, substituir os dados mais recentes, etc)
@@ -28,6 +28,11 @@ import XCTest
 
 
 final class CacheServiceTests: XCTestCase {
+
+	override func setUp() {
+		super.setUp()
+		try? FileManager.default.removeItem(at: validManagerURL())
+	}
 
 	func test_save_and_returned_last_entered_value() {
 		let sut = makeSUT()
@@ -63,6 +68,29 @@ final class CacheServiceTests: XCTestCase {
 		let returnedError = insert(sut, items: firstTimeItems, timestamp: firstTimeTimestamp)
 
 		XCTAssertNotNil(returnedError)
+	}
+
+	func test_delete_has_no_effect_to_delete_an_empty_cache() {
+		let sut = makeSUT()
+
+		assert(sut, completion: .empty)
+
+		let returnedError = deleteCache(sut)
+
+		XCTAssertNil(returnedError)
+	}
+
+	func test_delete_returned_empty_after_insert_new_data_cache() {
+		let sut = makeSUT()
+
+		let firstTimeItems = [makeItem(), makeItem()]
+		let firstTimeTimestamp = Date()
+
+		insert(sut, items: firstTimeItems, timestamp: firstTimeTimestamp)
+
+		deleteCache(sut)
+
+		assert(sut, completion: .empty)
 	}
 
 	private func makeSUT(managerURL: URL? = nil) -> CacheService {
@@ -115,5 +143,20 @@ final class CacheServiceTests: XCTestCase {
 		}
 
 		wait(for: [exp], timeout: 1.0)
+	}
+
+	@discardableResult
+	private func deleteCache(_ sut: CacheClient) -> Error? {
+		let exp = expectation(description: "esperando bloco ser completado")
+		var resultError: Error?
+
+		sut.delete { error in
+			resultError = error
+			exp.fulfill()
+		}
+
+		wait(for: [exp], timeout: 1.0)
+
+		return resultError
 	}
 }
