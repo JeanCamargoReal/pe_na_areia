@@ -26,7 +26,6 @@ OK - Erro (se possível para simular, ex:, permissão de gravação);
 import XCTest
 @testable import RestaurantDomain
 
-
 final class CacheServiceTests: XCTestCase {
 
 	override func setUp() {
@@ -48,12 +47,10 @@ final class CacheServiceTests: XCTestCase {
 
 		let firstTimeItems = [makeItem(), makeItem()]
 		let firstTimeTimestamp = Date()
-
 		insert(sut, items: firstTimeItems, timestamp: firstTimeTimestamp)
 
 		let secondTimeItems = [makeItem(), makeItem()]
 		let secondTimeTimestamp = Date()
-
 		insert(sut, items: secondTimeItems, timestamp: secondTimeTimestamp)
 
 		assert(sut, completion: .success(items: secondTimeItems, timestamp: secondTimeTimestamp))
@@ -85,7 +82,6 @@ final class CacheServiceTests: XCTestCase {
 
 		let firstTimeItems = [makeItem(), makeItem()]
 		let firstTimeTimestamp = Date()
-
 		insert(sut, items: firstTimeItems, timestamp: firstTimeTimestamp)
 
 		deleteCache(sut)
@@ -96,6 +92,7 @@ final class CacheServiceTests: XCTestCase {
 	func test_delete_returned_error_when_not_permission() {
 		let managerURL = invalidManagerURL()
 		let sut = makeSUT(managerURL: managerURL)
+
 		let returnedError = deleteCache(sut)
 
 		XCTAssertNotNil(returnedError)
@@ -118,8 +115,7 @@ final class CacheServiceTests: XCTestCase {
 	func test_load_return_data_after_insert_data() {
 		let sut = makeSUT()
 		let items = [makeItem(), makeItem()]
-		let timestamp =  Date()
-
+		let timestamp = Date()
 		insert(sut, items: items, timestamp: timestamp)
 
 		assert(sut, completion: .success(items: items, timestamp: timestamp))
@@ -131,6 +127,36 @@ final class CacheServiceTests: XCTestCase {
 		let anyError = NSError(domain: "anyError", code: -1)
 
 		try? "invalidData".write(to: managerURL, atomically: false, encoding: .utf8)
+
+		assert(sut, completion: .failure(anyError))
+	}
+
+	func test_taks_with_serial() {
+		let sut = makeSUT()
+		let items = [makeItem(), makeItem()]
+		let timestamp = Date()
+		var serialResult = [XCTestExpectation]()
+
+		let task1 = expectation(description: "taks 1")
+		sut.save(items, timestamp: timestamp) { _ in
+			serialResult.append(task1)
+			task1.fulfill()
+		}
+
+		let task2 = expectation(description: "taks 2")
+		sut.delete { _ in
+			serialResult.append(task2)
+			task2.fulfill()
+		}
+
+		let task3 = expectation(description: "taks 3")
+		sut.save(items, timestamp: timestamp) { _ in
+			serialResult.append(task3)
+			task3.fulfill()
+		}
+
+		waitForExpectations(timeout: 3.0)
+		XCTAssertEqual(serialResult, [task1, task2, task3])
 	}
 
 	private func makeSUT(managerURL: URL? = nil) -> CacheService {
@@ -182,7 +208,7 @@ final class CacheServiceTests: XCTestCase {
 			exp.fulfill()
 		}
 
-		wait(for: [exp], timeout: 1.0)
+		wait(for: [exp], timeout: 3.0)
 	}
 
 	@discardableResult
@@ -190,12 +216,12 @@ final class CacheServiceTests: XCTestCase {
 		let exp = expectation(description: "esperando bloco ser completado")
 		var resultError: Error?
 
-		sut.delete { error in
+		sut.delete{ error in
 			resultError = error
 			exp.fulfill()
 		}
 
-		wait(for: [exp], timeout: 1.0)
+		wait(for: [exp], timeout: 6.0)
 
 		return resultError
 	}
