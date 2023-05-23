@@ -17,7 +17,7 @@ OK Erro (se possível simular, ex: permissão);
 #### Apagar
 OK - O cache vazio não faz nada (o cache permanece vazio e não falha);
 OK - Os dados inseridos são apagadas;
-- Erro (se possível para simular, ex:, permissão de gravação);
+OK - Erro (se possível para simular, ex:, permissão de gravação);
 #### Multithread
 - Os efeitos colaterais (apagar o cache errado, substituir os dados mais recentes, etc)
 */
@@ -91,6 +91,14 @@ final class CacheServiceTests: XCTestCase {
 		deleteCache(sut)
 
 		assert(sut, completion: .empty)
+	}
+
+	func test_delete_returned_error_when_not_permission() {
+		let managerURL = invalidManagerURL()
+		let sut = makeSUT(managerURL: managerURL)
+		let returnedError = deleteCache(sut)
+
+		XCTAssertNotNil(returnedError)
 	}
 
 	private func makeSUT(managerURL: URL? = nil) -> CacheService {
