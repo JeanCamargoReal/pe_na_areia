@@ -9,13 +9,37 @@ import UIKit
 
 class ViewController: UITableViewController {
 
+	var restaurantItem: [FakeRestaurantViewModel] = []
+
+	override func viewDidLoad() {
+		super.viewDidLoad()
+
+		refresh()
+	}
+
+	@IBAction func refresh() {
+		refreshControl?.beginRefreshing()
+
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+			guard let self, self.restaurantItem.isEmpty else {
+				self?.refreshControl?.endRefreshing()
+
+				return
+			}
+
+			self.restaurantItem = FakeRestaurantViewModel.dataModel
+			self.tableView.reloadData()
+			self.refreshControl?.endRefreshing()
+		}
+	}
+
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-		return FakeRestaurantViewModel.dataModel.count
+		return restaurantItem.count
 	}
 
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let viewModel = FakeRestaurantViewModel.dataModel[indexPath.row]
+		let viewModel = restaurantItem[indexPath.row]
 		let cell = tableView.dequeueReusableCell(withIdentifier: "RestaurantItemCell", for: indexPath) as! RestaurantItemCell
 
 		cell.title.text = viewModel.title
