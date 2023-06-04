@@ -9,7 +9,7 @@
 
  Lista de restaurantes UI
 
-- [ ] Carregamento automático da lista de restaurantes, quando a tela for exibida
+- [X] Carregamento automático da lista de restaurantes, quando a tela for exibida
 - [ ] Habilitar recurso para atualização manual (pull to refresh)
 - [ ] Exibir um loading indicativo, durante processo de carregamento
 - [ ] Renderizar todas as informações disponíveis de restaurantes
@@ -31,7 +31,9 @@ final class RestaurantListViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		service?.load { result in
+		service?.load { [weak self] result in
+			guard let self else { return }
+
 			switch result {
 				case let .success(items):
 					self.restaurantCollection = items

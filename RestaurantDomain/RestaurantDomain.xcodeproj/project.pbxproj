@@ -14,6 +14,7 @@
 		C53DE9292A2D045600D0E7B9 /* RestaurantDomain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5628E6D29DA2B90000BED7E /* RestaurantDomain.framework */; };
 		C53DE92A2A2D045600D0E7B9 /* RestaurantDomain.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C5628E6D29DA2B90000BED7E /* RestaurantDomain.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C53DE92F2A2D07FE00D0E7B9 /* RestaurantListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53DE92E2A2D07FE00D0E7B9 /* RestaurantListViewController.swift */; };
+		C53DE9302A2D173C00D0E7B9 /* XCTestCase+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CB23B529F31DA000854368 /* XCTestCase+Helpers.swift */; };
 		C556BD142A2A27AC00C4D496 /* RestaurantUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C556BD0C2A2A27AC00C4D496 /* RestaurantUI.framework */; };
 		C556BD192A2A27AC00C4D496 /* RestaurantUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C556BD182A2A27AC00C4D496 /* RestaurantUITests.swift */; };
 		C556BD1A2A2A27AC00C4D496 /* RestaurantUI.h in Headers */ = {isa = PBXBuildFile; fileRef = C556BD0E2A2A27AC00C4D496 /* RestaurantUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -435,6 +436,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C53DE9302A2D173C00D0E7B9 /* XCTestCase+Helpers.swift in Sources */,
 				C556BD192A2A27AC00C4D496 /* RestaurantUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
