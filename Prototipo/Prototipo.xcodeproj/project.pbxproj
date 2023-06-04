@@ -294,6 +294,7 @@
 				DEVELOPMENT_TEAM = KA74A9Q966;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Prototipo/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pé na areia";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -322,6 +323,7 @@
 				DEVELOPMENT_TEAM = KA74A9Q966;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Prototipo/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Pé na areia";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

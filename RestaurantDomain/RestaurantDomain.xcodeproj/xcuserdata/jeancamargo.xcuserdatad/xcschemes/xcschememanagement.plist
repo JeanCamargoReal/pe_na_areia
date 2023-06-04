@@ -9,9 +9,24 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>RestaurantUI.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>C556BD0B2A2A27AC00C4D496</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C556BD122A2A27AC00C4D496</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>C5628E6C29DA2B90000BED7E</key>
 		<dict>
 			<key>primary</key>
